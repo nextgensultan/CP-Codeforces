@@ -6,6 +6,8 @@
         "vector": "cpp",
         "xstring": "cpp",
         "utility": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "ostream": "cpp",
+        "queue": "cpp"
     }
 }

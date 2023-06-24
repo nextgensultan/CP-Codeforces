@@ -4,7 +4,9 @@
 #include <set>
 #include <map>
 #include <list>
+#include <queue>
 #include <sstream>
+#include<cstdint>
 using namespace std;
 typedef long long ll;
 using namespace std;
@@ -56,9 +58,31 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
+bool ok(vector<ll> vt,ll k,ll h)
+{
+    ll sum =0;
+    FOR(i,0,vt.size()-1)
+        sum+=min(vt[i+1] - vt[i] ,k);
+    sum+=k;
+    return h<=sum;
+}
 void solve()
 {
-    
+    ll s, h;
+    cin >> s >> h;
+    vector<ll> vt(s);
+    FOR(i,0,s)
+        cin>>vt[i];
+    ll l=0,r=h+1;
+    while(r-l>1)
+    {
+        ll m =(l+r)>>1;
+        if(ok(vt,m,h))
+            r=m;
+        else
+            l=m;
+    }
+    cout<<r<<endl;
 }
 signed main()
 {

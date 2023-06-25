@@ -6,7 +6,6 @@
 #include <list>
 #include <queue>
 #include <sstream>
-#include<cstdint>
 using namespace std;
 typedef long long ll;
 using namespace std;
@@ -58,34 +57,37 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
-bool ok(vector<ll> vt,ll k,ll h)
-{
-    ll sum =0;
-    FOR(i,0,vt.size()-1)
-        sum+=min(vt[i+1] - vt[i] ,k);
-    //for last element adding k again;
-    sum+=k;
-    return h<=sum;
-}
 void solve()
 {
-    ll s, h;
-    cin >> s >> h;
-    vector<ll> vt(s);
-    FOR(i,0,s)
-        cin>>vt[i];
-    ll l=0,r=h+1;
-    
-    while(r-l>1)
+    int n;
+    cin >> n;
+    vector<pair<ll, ll>> a(n + 2, make_pair(1e18, 0));
+
+    FOR(i, 1, n + 1)
     {
-        ll m =(l+r)>>1;
-        if(ok(vt,m,h))
-            r=m;
-        else
-            l=m;
+        cin >> a[i].F;
     }
-    cout<<r<<endl;
+    FOR(i, 1, n + 1)
+    {
+        cin >> a[i].S;
+    }
+    a[0].F = a[0].S = 0;
+    sort(all(a));
+    ll sum = 0;
+    ROF(i, n, 1)
+    {
+        a[i].S += a[i + 1].S;
+    }
+    ll mx = 0;
+    ll ans = 1e18;
+    FOR(i, 0, n + 1)
+    {
+        mx = max(a[i].F, mx);
+        ans = min(ans, max(mx, a[i + 1].S));
+    }
+    cout << min(ans, mx) << endl;
 }
+
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);

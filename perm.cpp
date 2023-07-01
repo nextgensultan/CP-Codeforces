@@ -12,6 +12,8 @@ using namespace std;
 using ll = long long;
 const int MOD = 1e9 + 7;
 const ll INF = 1e18;
+// freopen("input.txt", "r", stdin);
+// freopen("output.txt", "w", stdout);
 #define F first
 #define S second
 #define all(x) x.begin(), x.end()
@@ -23,6 +25,9 @@ const ll INF = 1e18;
 #define ROF(i, a, b) for (int i = (a); i >= (b); --i)
 #define trav(a, x) for (auto &a : x)
 #define sz(x) (int)x.size()
+#define vi vector<int>
+#define vl vector<ll>
+#define vd vector<double>
 #define make_unique(v) \
     sort(all(v));      \
     v.erase(unique(all(v)), v.end())
@@ -59,34 +64,28 @@ ostream &operator<<(ostream &out, vector<T> &a)
 };
 void solve()
 {
-    int n;
-    cin >> n;
-    vector<pair<ll, ll>> a(n + 2, make_pair(1e18, 0));
-    FOR(i, 1, n + 1)
+    int n = 5;
+    vi vt(n);
+    FORE(i, 1, n)
+    vt[i - 1] = i;
+    do
     {
-        cin >> a[i].F;
-    }
-    FOR(i, 1, n + 1)
-    {
-        cin >> a[i].S;
-    }
-    a[0].F = a[0].S = 0;
-    sort(all(a));
-    ll sum = 0;
-    ROF(i, n, 1)
-    {
-        a[i].S += a[i + 1].S;
-    }
-    ll mx = 0;
-    ll ans = 1e18;
-    FOR(i, 0, n + 1)
-    {
-        mx = max(a[i].F, mx);
-        ans = min(ans, max(mx, a[i + 1].S));
-    }
-    cout << min(ans, mx) << endl;
+        vi st(n, 0);
+        int s = 0;
+        bool flag=false;
+        FOR(i, 0, n)
+        {
+            st[i] = (st[i] + vt[i] + s) % n;
+            s = st[i];
+            if(i>1 && st[i] - st[i+1] != 1)
+                {flag=true;break;}
+        }
+        if(!flag){
+        cout << vt << endl;
+        cout << st << "\n\n\n\n";
+        }
+    } while (next_permutation(all(vt)));
 }
-
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);

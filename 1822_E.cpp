@@ -6,12 +6,15 @@
 #include <list>
 #include <queue>
 #include <sstream>
+#include <cmath>
 using namespace std;
 typedef long long ll;
 using namespace std;
 using ll = long long;
 const int MOD = 1e9 + 7;
 const ll INF = 1e18;
+// freopen("input.txt", "r", stdin);
+// freopen("output.txt", "w", stdout);
 #define F first
 #define S second
 #define all(x) x.begin(), x.end()
@@ -23,6 +26,9 @@ const ll INF = 1e18;
 #define ROF(i, a, b) for (int i = (a); i >= (b); --i)
 #define trav(a, x) for (auto &a : x)
 #define sz(x) (int)x.size()
+#define vi vector<int>
+#define vl vector<ll>
+#define vd vector<double>
 #define make_unique(v) \
     sort(all(v));      \
     v.erase(unique(all(v)), v.end())
@@ -61,32 +67,34 @@ void solve()
 {
     int n;
     cin >> n;
-    vector<pair<ll, ll>> a(n + 2, make_pair(1e18, 0));
-    FOR(i, 1, n + 1)
+    string str;
+    cin >> str;
+    if (n & 1)
     {
-        cin >> a[i].F;
+        cout << -1 << endl;
+        return;
     }
-    FOR(i, 1, n + 1)
-    {
-        cin >> a[i].S;
-    }
-    a[0].F = a[0].S = 0;
-    sort(all(a));
+    vi occ(26, 0);
+    vi match(26, 0);
+    trav(ch, str)
+        occ[ch - 'a']++;
+    FOR(i, 0, n / 2)
+    match[str[i] - 'a'] += (str[i] == str[n - 1 - i]);
     ll sum = 0;
-    ROF(i, n, 1)
+    trav(i, match)
+        sum += ll(i);
+    FOR(i, 0, 26)
     {
-        a[i].S += a[i + 1].S;
+        int temp = n / 2 - match[i] - (occ[i] - 2 * match[i]);
+        if (temp < match[i])
+        {
+            cout << -1 << endl;
+            return;
+        }
     }
-    ll mx = 0;
-    ll ans = 1e18;
-    FOR(i, 0, n + 1)
-    {
-        mx = max(a[i].F, mx);
-        ans = min(ans, max(mx, a[i + 1].S));
-    }
-    cout << min(ans, mx) << endl;
+    sort(rall(match));
+    cout << max(ll(match[0]), (sum + 1) / 2) << endl;
 }
-
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);

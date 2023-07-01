@@ -6,6 +6,7 @@
 #include <list>
 #include <queue>
 #include <sstream>
+#include <stack>
 using namespace std;
 typedef long long ll;
 using namespace std;
@@ -59,34 +60,28 @@ ostream &operator<<(ostream &out, vector<T> &a)
 };
 void solve()
 {
-    int n;
-    cin >> n;
-    vector<pair<ll, ll>> a(n + 2, make_pair(1e18, 0));
-    FOR(i, 1, n + 1)
+    int n, k;
+    cin >> n >> k;
+    vector<int> vt(n), v2(n);
+    FOR(i, 0, n)
+    cin >> vt[i];
+    FOR(i, 0, n)
+    cin >> v2[i];
+    vector<int> v3 = vt;
+    map<int, stack<int>> mp;
+    sort(all(vt));
+    sort(all(v2));
+    FOR(i, 0, vt.size())
     {
-        cin >> a[i].F;
+        mp[vt[i]].push(v2[i]);
     }
-    FOR(i, 1, n + 1)
+    trav(i, v3)
     {
-        cin >> a[i].S;
+        cout << mp[i].top() << " ";
+        mp[i].pop();
     }
-    a[0].F = a[0].S = 0;
-    sort(all(a));
-    ll sum = 0;
-    ROF(i, n, 1)
-    {
-        a[i].S += a[i + 1].S;
-    }
-    ll mx = 0;
-    ll ans = 1e18;
-    FOR(i, 0, n + 1)
-    {
-        mx = max(a[i].F, mx);
-        ans = min(ans, max(mx, a[i + 1].S));
-    }
-    cout << min(ans, mx) << endl;
+    cout << endl;
 }
-
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);

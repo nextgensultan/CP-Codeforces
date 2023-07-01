@@ -8,6 +8,7 @@
         "utility": "cpp",
         "algorithm": "cpp",
         "ostream": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "cmath": "cpp"
     }
 }

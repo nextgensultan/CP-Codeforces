@@ -6,6 +6,7 @@
 #include <list>
 #include <queue>
 #include <sstream>
+#include <stack>
 using namespace std;
 typedef long long ll;
 using namespace std;
@@ -57,36 +58,55 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
+void dfs1(vector<vector<int>> &v1, vector<bool> &v, int index)
+{
+    v[index] = true;
+    trav(i, v1[index])
+    {
+        if (v[i])
+            continue;
+        dfs1(v1, v, i);
+    }
+}
+
 void solve()
 {
     int n;
     cin >> n;
-    vector<pair<ll, ll>> a(n + 2, make_pair(1e18, 0));
-    FOR(i, 1, n + 1)
-    {
-        cin >> a[i].F;
-    }
-    FOR(i, 1, n + 1)
-    {
-        cin >> a[i].S;
-    }
-    a[0].F = a[0].S = 0;
-    sort(all(a));
-    ll sum = 0;
-    ROF(i, n, 1)
-    {
-        a[i].S += a[i + 1].S;
-    }
-    ll mx = 0;
-    ll ans = 1e18;
-    FOR(i, 0, n + 1)
-    {
-        mx = max(a[i].F, mx);
-        ans = min(ans, max(mx, a[i + 1].S));
-    }
-    cout << min(ans, mx) << endl;
-}
+    vector<int> v1(n, 0);
+    vector<vector<int>> adj1(n, vector<int>(0));
+    vector<vector<int>> adj2(n, vector<int>(0));
 
+    FOR(i, 0, n)
+    {
+        int t;
+        cin >> t;
+        v1[i] = t - 1;
+        adj1[i].pb(t - 1);
+        adj2[i].pb(t - 1);
+        adj1[t - 1].pb(i);
+    }
+    int c1 = 0;
+    vector<bool> b1(n, false), b2(n, false);
+    FOR(i, 0, n)
+    {
+        if (b1[i])
+            continue;
+        dfs1(adj1, b1, i);
+        cout<<"\n\n\n\n\n";
+        c1++;
+    }
+    int c2 = 0;
+    FOR(i, 0, n)
+    {
+        if (b2[i])
+            continue;
+        dfs1(adj2, b2, i);
+        cout<<"\n\n\n\n\n";
+        c2++;
+    }
+    cout << c1 << " " << c2 << endl;
+}
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);

@@ -61,32 +61,24 @@ void solve()
 {
     int n;
     cin >> n;
-    vector<pair<ll, ll>> a(n + 2, make_pair(1e18, 0));
-    FOR(i, 1, n + 1)
+    vector<int> vt(101,0);
+    FOR(i,0,n)
     {
-        cin >> a[i].F;
+        int t;
+        cin>>t;
+        vt[t]++;
     }
-    FOR(i, 1, n + 1)
+    bool flag= true;
+    FOR(i,1,101)
     {
-        cin >> a[i].S;
+        if(vt[i]>vt[i-1])
+            {
+                flag= false;
+                break;
+            }
     }
-    a[0].F = a[0].S = 0;
-    sort(all(a));
-    ll sum = 0;
-    ROF(i, n, 1)
-    {
-        a[i].S += a[i + 1].S;
-    }
-    ll mx = 0;
-    ll ans = 1e18;
-    FOR(i, 0, n + 1)
-    {
-        mx = max(a[i].F, mx);
-        ans = min(ans, max(mx, a[i + 1].S));
-    }
-    cout << min(ans, mx) << endl;
+    cout<<(flag?"yes":"no")<<endl;
 }
-
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);

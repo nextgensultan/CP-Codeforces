@@ -65,53 +65,46 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
-ll fact(vl &fac, int n)
+int returnMIn(vector<vector<int>> &m, int l, int r)
 {
-    if (n <= 1)
-        return 1;
-    if (fac[n])
-        return fac[n];
-    return ll(n) * fact(fac, n - 1);
+    int diff = r - l + 1;
+    int lg = log2(diff);
+    return min(m[lg][l], m[lg][r - (1 << lg) + 1]);
 }
 void solve()
 {
+
     int n;
     cin >> n;
     vi vt(n);
-    unordered_map<int, int> count;
-    trav(i, vt)
+    int LOG = ceil(log2f(n));
+    vector<vector<int>> m(LOG, vector<int>(n));
+    FOR(i, 0, n)
     {
-        cin >> i;
-        count[i]++;
+        cin >> vt[i];
+        m[0][i] = vt[i];
     }
-    make_unique(vt);
-    
-    sort(all(vt));
-    // cout<<vt<<endl;
-    ll sum = 0;
-    FOR(i, 0, vt.size())
+    FOR(i, 1, LOG)
     {
-        FOR(j, i+1, vt.size())
+        FOR(j, 0, n - (1 << i) + 1)
         {
-            // cout<<vt[j] << " "<<vt[i]<<endl;
-            ll term =ll(1) * vt[j] * vt[j] / vt[i];
-            if (vt[j] % vt[i] == 0 && count.find(term) != count.end())
-                sum += ll(1) * count[vt[i]] * count[vt[j]] * count[term];
+            m[i][j] = min(m[i - 1][j], m[i - 1][j + (1 << (i - 1))]);
         }
     }
-    vl fac(1e6,0);
-    for (auto [k, v] : count)
+    int Q;
+    cin >> Q;
+    FOR(i, 0, Q)
     {
-        if (v >= 3)
-            sum += (fact(fac,v));
+        int l, r;
+        cin >> l >> r;
+        cout << returnMIn(m, l, r) << endl;
     }
-    cout<<sum<<endl;
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

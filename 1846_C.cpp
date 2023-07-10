@@ -65,47 +65,46 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
-ll fact(vl &fac, int n)
+bool comp(pair<ll, ll> &p1, pair<ll, ll> &p2)
 {
-    if (n <= 1)
-        return 1;
-    if (fac[n])
-        return fac[n];
-    return ll(n) * fact(fac, n - 1);
+    if (p1.F != p2.F)
+        return p1.F > p2.F;
+    return p1.S < p2.S;
 }
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);
-    unordered_map<int, int> count;
-    trav(i, vt)
+    ll n, m, h;
+    cin >> n >> m >> h;
+    vector<pair<ll, ll>> vt(n, {0, 0});
+    FOR(j, 0, n)
     {
-        cin >> i;
-        count[i]++;
-    }
-    make_unique(vt);
-    
-    sort(all(vt));
-    // cout<<vt<<endl;
-    ll sum = 0;
-    FOR(i, 0, vt.size())
-    {
-        FOR(j, i+1, vt.size())
+        vi ti(m);
+        trav(i, ti)
         {
-            // cout<<vt[j] << " "<<vt[i]<<endl;
-            ll term =ll(1) * vt[j] * vt[j] / vt[i];
-            if (vt[j] % vt[i] == 0 && count.find(term) != count.end())
-                sum += ll(1) * count[vt[i]] * count[vt[j]] * count[term];
+            cin >> i;
         }
+        sort(all(ti));
+        FOR(i, 1, m)
+        ti[i] += ti[i - 1];
+        auto it = upper_bound(all(ti), h);
+        // cout<<ti<<endl;
+        int index = it - ti.begin();
+        ll sum = 0;
+        FOR(i, 0, index)
+        sum += ti[i];
+
+        vt[j].F = index, vt[j].S = sum;
     }
-    vl fac(1e6,0);
-    for (auto [k, v] : count)
+    pair<ll, ll> ans = vt[0];
+
+    sort(all(vt), comp);
+
+    FOR(i, 0, n)
+    if (ans == vt[i])
     {
-        if (v >= 3)
-            sum += (fact(fac,v));
+        cout << i + 1 << endl;
+        return;
     }
-    cout<<sum<<endl;
 }
 signed main()
 {

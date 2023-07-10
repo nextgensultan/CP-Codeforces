@@ -65,47 +65,37 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
-ll fact(vl &fac, int n)
-{
-    if (n <= 1)
-        return 1;
-    if (fac[n])
-        return fac[n];
-    return ll(n) * fact(fac, n - 1);
-}
 void solve()
 {
     int n;
     cin >> n;
     vi vt(n);
-    unordered_map<int, int> count;
     trav(i, vt)
     {
         cin >> i;
-        count[i]++;
     }
-    make_unique(vt);
-    
-    sort(all(vt));
-    // cout<<vt<<endl;
-    ll sum = 0;
-    FOR(i, 0, vt.size())
+    int l = 0, r = n;
+    while (r - l > 1)
     {
-        FOR(j, i+1, vt.size())
+        int mid = (r + l) >> 1;
+        cout << flush;
+        cout << "?" << r - l + 1 << " ";
+        int sum = 0;
+        FOR(i, l + 1, mid)
         {
-            // cout<<vt[j] << " "<<vt[i]<<endl;
-            ll term =ll(1) * vt[j] * vt[j] / vt[i];
-            if (vt[j] % vt[i] == 0 && count.find(term) != count.end())
-                sum += ll(1) * count[vt[i]] * count[vt[j]] * count[term];
+            cout << vt[i] << " ";
+            sum += vt[i];
         }
+        cout << endl;
+        int ans = 0;
+        cin >> ans;
+        if (ans > sum)
+            r=mid;
+        else
+            l=mid;
     }
-    vl fac(1e6,0);
-    for (auto [k, v] : count)
-    {
-        if (v >= 3)
-            sum += (fact(fac,v));
-    }
-    cout<<sum<<endl;
+    cout<<flush;
+    cout<<"! "<<l<<endl;
 }
 signed main()
 {

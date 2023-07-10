@@ -65,47 +65,50 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
-ll fact(vl &fac, int n)
+
+#define inf 1e18
+#define N 100005
+
+ll n, k, a[N], mem[N][105];
+
+ll sum(ll l, ll r)
 {
-    if (n <= 1)
-        return 1;
-    if (fac[n])
-        return fac[n];
-    return ll(n) * fact(fac, n - 1);
+    ll ans = 0;
+    FOR(i, l, r)
+    {
+        ans += abs(a[i] - a[i + 1]);
+    }
+
+    return ans;
 }
+
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);
-    unordered_map<int, int> count;
-    trav(i, vt)
+    cin >> n >> k;
+
+    FOR(i, 1, n + 1)
     {
-        cin >> i;
-        count[i]++;
+        cin >> a[i];
     }
-    make_unique(vt);
-    
-    sort(all(vt));
-    // cout<<vt<<endl;
-    ll sum = 0;
-    FOR(i, 0, vt.size())
+    FOR(i, 1, n + 1)
     {
-        FOR(j, i+1, vt.size())
+        mem[i][1] = sum(1, i);
+    }
+
+    FOR(i, 2, k + 1)
+    {
+        FOR(j, i, n + 1)
         {
-            // cout<<vt[j] << " "<<vt[i]<<endl;
-            ll term =ll(1) * vt[j] * vt[j] / vt[i];
-            if (vt[j] % vt[i] == 0 && count.find(term) != count.end())
-                sum += ll(1) * count[vt[i]] * count[vt[j]] * count[term];
+            mem[j][i] = inf;
+
+            FOR(k, i - 1, j)
+            {
+                mem[j][i] = min(mem[j][i], mem[k][i - 1] + sum(k + 1, j));
+            }
         }
     }
-    vl fac(1e6,0);
-    for (auto [k, v] : count)
-    {
-        if (v >= 3)
-            sum += (fact(fac,v));
-    }
-    cout<<sum<<endl;
+
+    cout << mem[n][k] << endl;
 }
 signed main()
 {

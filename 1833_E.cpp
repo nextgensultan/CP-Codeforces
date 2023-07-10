@@ -65,47 +65,49 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
-ll fact(vl &fac, int n)
+bool dfs(vector<set<int>> &adj, vector<bool> &v, int index, int parent)
 {
-    if (n <= 1)
-        return 1;
-    if (fac[n])
-        return fac[n];
-    return ll(n) * fact(fac, n - 1);
+    v[index] = true;
+    bool flag = false;
+    for (auto i : adj[index])
+    {
+        if (v[i] == false)
+        {
+            if (dfs(adj, v, i, index))
+                flag = true;
+        }
+        else if (i != parent && parent != index)
+        {
+            flag = true;
+        }
+    }
+    return flag;
 }
 void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);
-    unordered_map<int, int> count;
-    trav(i, vt)
+    vi vt;
+    vector<set<int>> adj(n);
+    FOR(i, 0, n)
     {
-        cin >> i;
-        count[i]++;
+        int s;
+        cin >> s;
+        s--;
+        adj[i].insert(s);
+        adj[s].insert(i);
     }
-    make_unique(vt);
-    
-    sort(all(vt));
-    // cout<<vt<<endl;
-    ll sum = 0;
-    FOR(i, 0, vt.size())
+    vector<bool> v(n, false);
+    int c = 0, o = 0;
+    FOR(i, 0, n)
     {
-        FOR(j, i+1, vt.size())
-        {
-            // cout<<vt[j] << " "<<vt[i]<<endl;
-            ll term =ll(1) * vt[j] * vt[j] / vt[i];
-            if (vt[j] % vt[i] == 0 && count.find(term) != count.end())
-                sum += ll(1) * count[vt[i]] * count[vt[j]] * count[term];
-        }
+        if (v[i])
+            continue;
+        bool flag = dfs(adj, v, i, i);
+        c += flag;
+        o += !flag;
     }
-    vl fac(1e6,0);
-    for (auto [k, v] : count)
-    {
-        if (v >= 3)
-            sum += (fact(fac,v));
-    }
-    cout<<sum<<endl;
+    cout << c + bool(o) << " " << c + o << endl;
 }
 signed main()
 {

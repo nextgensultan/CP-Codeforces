@@ -65,47 +65,66 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
-ll fact(vl &fac, int n)
+void update(vi &tree, int index)
 {
-    if (n <= 1)
-        return 1;
-    if (fac[n])
-        return fac[n];
-    return ll(n) * fact(fac, n - 1);
+    index += tree.size() >> 1;
+    tree[index] = 1;
+    while (index > 1)
+    {
+        index >>= 1;
+        tree[index] = tree[index << 1] + tree[(index << 1) + 1];
+    }
+}
+int GetSum(vi &tree, int l, int r)
+{
+    int sum = 0;
+    int n = tree.size() >> 1;
+    l += n;
+    r += n;
+    while (l <= r)
+    {
+        if (l & 1)
+            sum += tree[l++];
+        if (!(r & 1))
+            sum += tree[r--];
+        l >>= 1;
+        r >>= 1;
+    }
+    return sum;
 }
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);
-    unordered_map<int, int> count;
-    trav(i, vt)
+    int n, m;
+    cin >> n >> m;
+    set<pair<int, int>> range;
+    FOR(i, 0, m)
     {
-        cin >> i;
-        count[i]++;
+        int l, r;
+        cin >> l >> r;
+        range.insert({l - 1, r - 1});
     }
-    make_unique(vt);
-    
-    sort(all(vt));
-    // cout<<vt<<endl;
-    ll sum = 0;
-    FOR(i, 0, vt.size())
+    int q;
+    cin >> q;
+    vi tree(n << 1, 0);
+    int res = -1;
+    FOR(i, 0, q)
     {
-        FOR(j, i+1, vt.size())
+
+        int index;
+        cin >> index;
+        if (res != -1)
+            continue;
+        update(tree, index - 1);
+        trav(p, range)
         {
-            // cout<<vt[j] << " "<<vt[i]<<endl;
-            ll term =ll(1) * vt[j] * vt[j] / vt[i];
-            if (vt[j] % vt[i] == 0 && count.find(term) != count.end())
-                sum += ll(1) * count[vt[i]] * count[vt[j]] * count[term];
+            if (GetSum(tree, p.F, p.S) > ((p.S - p.F + 1) >> 1))
+            {
+                res = i + 1;
+                break;
+            }
         }
     }
-    vl fac(1e6,0);
-    for (auto [k, v] : count)
-    {
-        if (v >= 3)
-            sum += (fact(fac,v));
-    }
-    cout<<sum<<endl;
+    cout << res << endl;
 }
 signed main()
 {

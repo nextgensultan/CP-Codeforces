@@ -65,47 +65,25 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
-ll fact(vl &fac, int n)
+long double area(int b, int h, int x, int y)
 {
-    if (n <= 1)
-        return 1;
-    if (fac[n])
-        return fac[n];
-    return ll(n) * fact(fac, n - 1);
+    double ratio = b / h;
+    double ans = min(0, y - x + h);
+    return (b * h / 2.0 - (ans * ratio * ans / 2.0));
 }
 void solve()
 {
-    int n;
-    cin >> n;
+    int n, d, h;
+    cin >> n >> d >> h;
     vi vt(n);
-    unordered_map<int, int> count;
-    trav(i, vt)
-    {
-        cin >> i;
-        count[i]++;
-    }
-    make_unique(vt);
-    
+    cin >> vt;
     sort(all(vt));
-    // cout<<vt<<endl;
-    ll sum = 0;
-    FOR(i, 0, vt.size())
+    long double sum = 0;
+    FOR(i, 0, n - 1)
     {
-        FOR(j, i+1, vt.size())
-        {
-            // cout<<vt[j] << " "<<vt[i]<<endl;
-            ll term =ll(1) * vt[j] * vt[j] / vt[i];
-            if (vt[j] % vt[i] == 0 && count.find(term) != count.end())
-                sum += ll(1) * count[vt[i]] * count[vt[j]] * count[term];
-        }
+        sum += area(d, h, vt[i], vt[i + 1]);
     }
-    vl fac(1e6,0);
-    for (auto [k, v] : count)
-    {
-        if (v >= 3)
-            sum += (fact(fac,v));
-    }
-    cout<<sum<<endl;
+    sum += (d * h / 2.0);
 }
 signed main()
 {

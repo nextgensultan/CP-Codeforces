@@ -65,47 +65,22 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
-ll fact(vl &fac, int n)
-{
-    if (n <= 1)
-        return 1;
-    if (fac[n])
-        return fac[n];
-    return ll(n) * fact(fac, n - 1);
-}
 void solve()
 {
     int n;
     cin >> n;
     vi vt(n);
-    unordered_map<int, int> count;
+    int x = 0;
+    int cnt = 0;
     trav(i, vt)
     {
         cin >> i;
-        count[i]++;
+        x ^= i;
     }
-    make_unique(vt);
-    
-    sort(all(vt));
-    // cout<<vt<<endl;
-    ll sum = 0;
-    FOR(i, 0, vt.size())
-    {
-        FOR(j, i+1, vt.size())
-        {
-            // cout<<vt[j] << " "<<vt[i]<<endl;
-            ll term =ll(1) * vt[j] * vt[j] / vt[i];
-            if (vt[j] % vt[i] == 0 && count.find(term) != count.end())
-                sum += ll(1) * count[vt[i]] * count[vt[j]] * count[term];
-        }
-    }
-    vl fac(1e6,0);
-    for (auto [k, v] : count)
-    {
-        if (v >= 3)
-            sum += (fact(fac,v));
-    }
-    cout<<sum<<endl;
+    if(n&1)
+        cout<<x<<endl;
+    else
+        cout<<(!x?x:-1)<<endl;
 }
 signed main()
 {

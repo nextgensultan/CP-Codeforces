@@ -9,6 +9,7 @@
 #include <list>
 #include <queue>
 #include <sstream>
+#include <bitset>
 using namespace std;
 typedef long long ll;
 using namespace std;
@@ -31,6 +32,13 @@ const ll INF = 1e18;
 #define vi vector<int>
 #define vl vector<ll>
 #define vd vector<double>
+#define pii pair<int, int>
+#define vvi vector<vi>
+#define vvd vector<vd>
+#define vvl vector<vl>
+#define bitat(x, i) (((x) >> (i)) & 1)
+#define bitcount(a) (int)__builtin_popcount(a)
+#define bitcountll(a) (int)__builtin_popcountll(a)
 #define make_unique(v) \
     sort(all(v));      \
     v.erase(unique(all(v)), v.end())
@@ -65,25 +73,43 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
+void YES(bool t = 1) { cout << (t ? "YES\n" : "NO\n"); }
+void Yes(bool t = 1) { cout << (t ? "Yes\n" : "No\n"); }
+void yes(bool t = 1) { cout << (t ? "yes\n" : "no\n"); }
+void NO(bool t = 1) { YES(!t); }
+void No(bool t = 1) { Yes(!t); }
+void no(bool t = 1) { yes(!t); }
 void solve()
 {
-    set<int> f;
     int n;
     cin >> n;
-    vi vt(n);
-    cin >> vt;
-    int x = 0;
-    f.insert(x);
-    trav(i, vt)
+    int a1 = 0, a2 = 0;
+    vi v1(n), v2(n);
+    FOR(i, 0, n)
+    scanf("&d", &v1[i]);
+    FOR(i, 0, n)
+    scanf("&d", &v2[i]);
+    vi c1(2 * n + 1, 0), c2(2 * n + 1, 0);
+    FOR(i, 0, n)
     {
-        x ^= i;
-        f.insert(x);
+        int j = i;
+        while (j < n && v1[i] == v1[j])
+            j++;
+        c1[v1[i]] = max(c1[v1[i]], j - i);
+    }
+    FOR(i, 0, n)
+    {
+        int j = i;
+        while (j < n && v2[i] == v2[j])
+            j++;
+        c2[v2[i]] = max(c2[v2[i]], j - i);
     }
     int ans = 0;
-    trav(i, f)
-        trav(j, f)
-            ans = max(ans, i ^ j);
-    cout << ans << endl;
+    FOR(i, 0, 2 * n + 1)
+    {
+        ans = max(ans, c1[i] + c2[i]);
+    }
+    cout << ans << "\n";
 }
 signed main()
 {

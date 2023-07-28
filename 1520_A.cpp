@@ -9,6 +9,7 @@
 #include <list>
 #include <queue>
 #include <sstream>
+#include <bitset>
 using namespace std;
 typedef long long ll;
 using namespace std;
@@ -31,6 +32,13 @@ const ll INF = 1e18;
 #define vi vector<int>
 #define vl vector<ll>
 #define vd vector<double>
+#define pii pair<int, int>
+#define vvi vector<vi>
+#define vvd vector<vd>
+#define vvl vector<vl>
+#define bitat(x, i) (((x) >> (i)) & 1)
+#define bitcount(a) (int)__builtin_popcount(a)
+#define bitcountll(a) (int)__builtin_popcountll(a)
 #define make_unique(v) \
     sort(all(v));      \
     v.erase(unique(all(v)), v.end())
@@ -65,22 +73,36 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
+void YES(bool t = 1) { cout << (t ? "YES\n" : "NO\n"); }
+void Yes(bool t = 1) { cout << (t ? "Yes\n" : "No\n"); }
+void yes(bool t = 1) { cout << (t ? "yes\n" : "no\n"); }
+void NO(bool t = 1) { YES(!t); }
+void No(bool t = 1) { Yes(!t); }
+void no(bool t = 1) { yes(!t); }
 void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);
-    int x = 0;
-    int cnt = 0;
-    trav(i, vt)
+    string s;
+    cin >> s;
+    vi vt(26, 0);
+    FOR(i, 0, n)
     {
-        cin >> i;
-        x ^= i;
+        if (vt[s[i] - 'a'] != 0)
+        {
+            NO();
+            return;
+        }
+        vt[s[i] - 'a'] = true;
+        char ch = s[i];
+        FOR(j, i + 1, n)
+        {
+            if (s[j] == ch)
+                i++;
+            else
+                break;
+        }
     }
-    if(n&1)
-        cout<<x<<endl;
-    else
-        cout<<(!x?x:-1)<<endl;
 }
 signed main()
 {

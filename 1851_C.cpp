@@ -9,6 +9,7 @@
 #include <list>
 #include <queue>
 #include <sstream>
+#include <bitset>
 using namespace std;
 typedef long long ll;
 using namespace std;
@@ -31,6 +32,13 @@ const ll INF = 1e18;
 #define vi vector<int>
 #define vl vector<ll>
 #define vd vector<double>
+#define pii pair<int, int>
+#define vvi vector<vi>
+#define vvd vector<vd>
+#define vvl vector<vl>
+#define bitat(x, i) (((x) >> (i)) & 1)
+#define bitcount(a) (int)__builtin_popcount(a)
+#define bitcountll(a) (int)__builtin_popcountll(a)
 #define make_unique(v) \
     sort(all(v));      \
     v.erase(unique(all(v)), v.end())
@@ -65,25 +73,52 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
+void YES(bool t = 1) { cout << (t ? "YES\n" : "NO\n"); }
+void Yes(bool t = 1) { cout << (t ? "Yes\n" : "No\n"); }
+void yes(bool t = 1) { cout << (t ? "yes\n" : "no\n"); }
+void NO(bool t = 1) { YES(!t); }
+void No(bool t = 1) { Yes(!t); }
+void no(bool t = 1) { yes(!t); }
 void solve()
 {
-    set<int> f;
-    int n;
-    cin >> n;
+    int n, d;
+    cin >> n >> d;
     vi vt(n);
     cin >> vt;
-    int x = 0;
-    f.insert(x);
-    trav(i, vt)
+    int c1 = 0;
+    int ind = 0;
+    FOR(i, 0, n)
     {
-        x ^= i;
-        f.insert(x);
+        ind = i;
+        if (vt[i] == vt[0])
+            c1++;
+        if (c1 >= d)
+            break;
     }
-    int ans = 0;
-    trav(i, f)
-        trav(j, f)
-            ans = max(ans, i ^ j);
-    cout << ans << endl;
+    if (c1 < d)
+    {
+        NO();
+        return;
+    }
+    if (vt[0] == vt[n - 1])
+    {
+        YES();
+        return;
+    }
+    int c2=0;
+    ROF(i, n - 1, ind)
+    {
+        if (vt[i] == vt[n - 1])
+            c2++;
+    }
+    if (c2 >= d)
+    {
+        YES();
+    }
+    else
+    {
+        NO();
+    }
 }
 signed main()
 {

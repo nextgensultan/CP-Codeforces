@@ -31,6 +31,13 @@ const ll INF = 1e18;
 #define vi vector<int>
 #define vl vector<ll>
 #define vd vector<double>
+#define pii pair<int, int>
+#define vvi vector<vi>
+#define vvd vector<vd>
+#define vvl vector<vl>
+#define bitat(x, i) (((x) >> (i)) & 1)
+#define bitcount(a) (int)__builtin_popcount(a)
+#define bitcountll(a) (int)__builtin_popcountll(a)
 #define make_unique(v) \
     sort(all(v));      \
     v.erase(unique(all(v)), v.end())
@@ -65,25 +72,24 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
+void YES(bool t = 1) { cout << (t ? "YES\n" : "NO\n"); }
+void Yes(bool t = 1) { cout << (t ? "Yes\n" : "No\n"); }
+void yes(bool t = 1) { cout << (t ? "yes\n" : "no\n"); }
+void NO(bool t = 1) { YES(!t); }
+void No(bool t = 1) { Yes(!t); }
+void no(bool t = 1) { yes(!t); }
 void solve()
 {
-    set<int> f;
     int n;
     cin >> n;
-    vi vt(n);
-    cin >> vt;
-    int x = 0;
-    f.insert(x);
-    trav(i, vt)
+    int a = 1;
+    while (n % a == 0)
+        a++;
+    for (int i = 0; i < n; i++)
     {
-        x ^= i;
-        f.insert(x);
+        cout << char('a' + (i % a));
     }
-    int ans = 0;
-    trav(i, f)
-        trav(j, f)
-            ans = max(ans, i ^ j);
-    cout << ans << endl;
+    cout << "\n";
 }
 signed main()
 {

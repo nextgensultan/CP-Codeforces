@@ -9,6 +9,8 @@
 #include <list>
 #include <queue>
 #include <sstream>
+#include <bitset>
+#include <functional>
 using namespace std;
 typedef long long ll;
 using namespace std;
@@ -31,6 +33,13 @@ const ll INF = 1e18;
 #define vi vector<int>
 #define vl vector<ll>
 #define vd vector<double>
+#define pii pair<int, int>
+#define vvi vector<vi>
+#define vvd vector<vd>
+#define vvl vector<vl>
+#define bitat(x, i) (((x) >> (i)) & 1)
+#define bitcount(a) (int)__builtin_popcount(a)
+#define bitcountll(a) (int)__builtin_popcountll(a)
 #define make_unique(v) \
     sort(all(v));      \
     v.erase(unique(all(v)), v.end())
@@ -65,25 +74,58 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
+void YES(bool t = 1) { cout << (t ? "YES\n" : "NO\n"); }
+void Yes(bool t = 1) { cout << (t ? "Yes\n" : "No\n"); }
+void yes(bool t = 1) { cout << (t ? "yes\n" : "no\n"); }
+void NO(bool t = 1) { YES(!t); }
+void No(bool t = 1) { Yes(!t); }
+void no(bool t = 1) { yes(!t); }
 void solve()
 {
-    set<int> f;
-    int n;
-    cin >> n;
-    vi vt(n);
-    cin >> vt;
-    int x = 0;
-    f.insert(x);
-    trav(i, vt)
+    int n, c;
+    cin >> n >> c;
+    vl dist(n, 0);
+    vector<vector<pair<ll, ll>>> adj(n, vector<pair<ll, ll>>(0));
+    vector<tuple<ll, ll, ll>> e;
+    vector<bool> visit(n, 0);
+
+    FOR(i, 0, c)
     {
-        x ^= i;
-        f.insert(x);
+        int a, b, x;
+        cin >> a >> b >> x;
+        a--, b--;
+        e.pb({a, b, x});
+        adj[a].pb({b, x});
+        adj[b].pb({a, -x});
     }
-    int ans = 0;
-    trav(i, f)
-        trav(j, f)
-            ans = max(ans, i ^ j);
-    cout << ans << endl;
+    function<void(int)> dfs = [&](int index)
+    {
+        visit[index] = true;
+        trav(i, adj[index])
+        {
+            if (visit[i.F])
+                continue;
+            dist[i.F] = dist[index] + i.S;
+            dfs(i.F);
+        }
+    };
+    FOR(i, 0, n)
+    {
+        if (visit[i] == false)
+        {
+            dist[i] = 1;
+            dfs(i);
+        }
+    }
+    bool flag = true;
+    
+    trav(i, e)
+    {
+        int A, B, C;
+        tie(A, B, C) = i;
+        flag &= (dist[A] + C == dist[B]);
+    }
+    YES(flag);
 }
 signed main()
 {

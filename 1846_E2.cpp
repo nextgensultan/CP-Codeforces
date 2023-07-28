@@ -31,6 +31,13 @@ const ll INF = 1e18;
 #define vi vector<int>
 #define vl vector<ll>
 #define vd vector<double>
+#define pii pair<int, int>
+#define vvi vector<vi>
+#define vvd vector<vd>
+#define vvl vector<vl>
+#define bitat(x, i) (((x) >> (i)) & 1)
+#define bitcount(a) (int)__builtin_popcount(a)
+#define bitcountll(a) (int)__builtin_popcountll(a)
 #define make_unique(v) \
     sort(all(v));      \
     v.erase(unique(all(v)), v.end())
@@ -65,25 +72,54 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
-long double area(int b, int h, int x, int y)
+void YES(bool t = 1) { cout << (t ? "YES\n" : "NO\n"); }
+void Yes(bool t = 1) { cout << (t ? "Yes\n" : "No\n"); }
+void yes(bool t = 1) { cout << (t ? "yes\n" : "no\n"); }
+void NO(bool t = 1) { YES(!t); }
+void No(bool t = 1) { Yes(!t); }
+void no(bool t = 1) { yes(!t); }
+int valid(__int128_t m,__int128_t it, __int128_t n)
 {
-    double ratio = b / h;
-    double ans = min(0, y - x + h);
-    return (b * h / 2.0 - (ans * ratio * ans / 2.0));
+    __int128_t ans = 1;
+    __int128_t res = 0;
+    FOR(i, 0, it)
+    {
+        res += ans;
+        if (res > n || res<0)
+            return -1;
+        ans *= m;
+    }
+    return (res == n);
 }
 void solve()
 {
-    int n, d, h;
-    cin >> n >> d >> h;
-    vi vt(n);
-    cin >> vt;
-    sort(all(vt));
-    long double sum = 0;
-    FOR(i, 0, n - 1)
+    ll n;
+    cin >> n;
+    if (n < 7)
     {
-        sum += area(d, h, vt[i], vt[i + 1]);
+        NO();
+        return;
     }
-    sum += (d * h / 2.0);
+    FOR(i, 3, 63)
+    {
+        __int128_t l = 1, r = 1e12;
+        while (r - l > 1)
+        {
+
+            __int128_t mid = (r + l) >> 1;
+            int res = valid(mid, i, n);
+            if (res == 1)
+            {
+                YES();
+                return;
+            }
+            if (res == 0)
+                l = mid;
+            else
+                r = mid;
+        }
+    }
+    NO();
 }
 signed main()
 {

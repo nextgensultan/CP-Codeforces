@@ -81,38 +81,42 @@ void yes(bool t = 1) { cout << (t ? "yes\n" : "no\n"); }
 void NO(bool t = 1) { YES(!t); }
 void No(bool t = 1) { Yes(!t); }
 void no(bool t = 1) { yes(!t); }
+int X[] = {0,0 ,-1,-1,-1,1,1,1};
+int Y[] = {-1,1,0,-1,1,0,-1,1};
 ll gcd(ll a, ll b)
 {
     return b ? gcd(b, a % b) : a;
 }
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    int r,c;
+    cin >> r >> c;
+    vector<string> grid(r);
+    cin>>grid;
+    vector<vector<bool>> flag(r,vector<bool>(c,false));
+    FOR(i,1,r - 1)
     {
-    	p[i]++;
+    	FOR(j,1,c-1)
+    	{
+    		int f = true;
+    		FOR(k,0,8)
+    			f&=(grid[i + Y[k]][j + X[k]] == '#');
+    		if(f==false) continue;
+    		FOR(k,0,8)
+    			flag[i + Y[k]][j + X[k]] = true;
+    	}
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    FOR(i,0,r)
+    	FOR(j,0,c)
+    		if(grid[i][j] == '#' && flag[i][j]==false)
+    			{NO();return;}
+    YES();
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

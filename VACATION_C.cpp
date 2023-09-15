@@ -89,30 +89,25 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vvl dp(n, vl(3, 0));
+    FOR(i, 0, n)
     {
-    	p[i]++;
+        FOR(j, 0, 3)
+        cin >> dp[i][j];
     }
-    int ans=0;
-    if(p[-1] > p[1])
+    FOR(i, 1, n)
     {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
+        dp[i][0] += max(dp[i - 1][1], dp[i - 1][2]);
+        dp[i][2] += max(dp[i - 1][1], dp[i - 1][0]);
+        dp[i][1] += max(dp[i - 1][0], dp[i - 1][2]);
     }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout << *max_element(all(dp[n - 1])) << "\n";
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

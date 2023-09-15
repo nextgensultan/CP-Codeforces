@@ -87,32 +87,38 @@ ll gcd(ll a, ll b)
 }
 void solve()
 {
-    int n;
+	vector<vector<int>> lcs(11,vector<int>(11,0));
+    string n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vector<string> poss;
+    for(ll i=1;i*i<=min(stoi(n) ,int(2e9));i++)
+    	poss.pb(to_string(int(i*i)));
+    int mn=MOD;
+    trav(i,poss)
     {
-    	p[i]++;
+    	for(int j=1;j<=sz(i);j++)
+    	{
+    		for(int k =1;k<=sz(n);k++)
+    		{
+    		    lcs[j][k] = 0;
+    		    lcs[j][k] = max(lcs[j-1][k],lcs[j][k-1]);
+    			lcs[j][k] = max(lcs[j][k],lcs[j-1][k-1]  + bool(i[j-1] == n[k-1]));
+    		}
+    	}
+    	if(lcs[sz(i)][sz(n)] < sz(i))
+    		continue;
+    	mn = min(mn,sz(n) - lcs[sz(i)][sz(n)]);
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    if(mn==MOD)
+    	cout<<-1<<"\n";
+    else	cout << mn<<"\n";
+    
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

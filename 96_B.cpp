@@ -85,34 +85,29 @@ ll gcd(ll a, ll b)
 {
     return b ? gcd(b, a % b) : a;
 }
+set<ll> ans;
+void create(ll cur=0,ll l=0,ll r =0)
+{
+	if(cur>1e12)
+		return;
+	if(l==r)
+		ans.insert(cur);
+	create(cur*10 + 4 ,l+1,r);
+	create(cur*10 + 7 ,l,r +1);
+}
 void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
-    {
-    	p[i]++;
-    }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+	create();
+	cout << *ans.lower_bound(n) << "\n";
+    
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

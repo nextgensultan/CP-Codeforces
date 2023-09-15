@@ -89,24 +89,18 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vector<vector<ll>> mat(2,vector<ll>(n,0));
+    cin>>mat[0]>>mat[1];
+    vector<vector<ll>> ps(2,vector<ll>(n,0));
+    partial_sum(all(mat[0]),ps[0].begin());
+    partial_sum(all(mat[1]),ps[1].begin());
+    ll mx = 0;
+    ll ans = 1e18;
+    FOR(i,0,n)
     {
-    	p[i]++;
+            ans = min(ans,max(ps[0][n-1] - ps[0][i] , i?ps[1][i-1]:0));
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout<<ans<<"\n";
 }
 signed main()
 {

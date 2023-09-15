@@ -89,24 +89,35 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vi vt(n);
+    cin >> vt;
+    vi mis(n);
+    set<int> s;
+    int m=0;
+    for(int i=n-1;i>=0;i--)
     {
-    	p[i]++;
+    	s.insert(vt[i]);
+    	while(s.find(m)!=s.end())m++;
+    	mis[i] = m;
     }
-    int ans=0;
-    if(p[-1] > p[1])
+    int i=0;
+    vi ans;
+    while(i<n)
     {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
+        int an = mis[i];
+        m=0;
+        s.clear();
+        int j=i;
+        while(m!=an)
+        {
+            s.insert(vt[j]);
+            while(s.find(m)!=s.end())m++;
+            j++;
+        }
+        ans.pb(an);
+        i=max(i+1,j);
     }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout<<sz(ans)<<"\n"<<ans<<"\n";
 }
 signed main()
 {

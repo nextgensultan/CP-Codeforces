@@ -87,26 +87,13 @@ ll gcd(ll a, ll b)
 }
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
-    {
-    	p[i]++;
-    }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    int a,b,c;
+    cin >> a>>b>>c;
+    if(a+(c+1)/2 > b+c/2)
+    	cout<<"First\n";
+   	else
+   		cout<<"Second\n";
+    
 }
 signed main()
 {

@@ -87,26 +87,23 @@ ll gcd(ll a, ll b)
 }
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    int n,m;
+    cin >> n>>m;
+    vector<string> vt(n);
+    cin>>vt;
+    string str ="vika";
+    int ind=0;
+    FOR(i,0,m)
     {
-    	p[i]++;
+
+    	FOR(j,0,n)
+    	{
+    		if(vt[j][i] == str[ind])
+    			{ind++;break;}
+    	}
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    YES(ind==4);
+    
 }
 signed main()
 {

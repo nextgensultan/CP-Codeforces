@@ -89,24 +89,40 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vector<int> vt(n);
+    cin>>vt;
+    sort(all(vt));
+    set<int> p;
+    p.insert(0);
+    for(int i=0;i<31;i++)
+    	p.insert(1<<i);
+    vector<bool> valid(n,false);
+    vector<int> pre(n);
+    partial_sum(all(vt),pre.begin());
+    valid[0]=true;
+    for(int i=1;i<n;i++)
+    	valid[i] = p.find(vt[i] - vt[i-1]) != p.end() && valid[i-1];
+    int l =max(0,vt[0] - 1) ,r = vt[n-1] + 1;
+    while(r-l>1)
     {
-    	p[i]++;
+    	int mid = (l+r)>>1;
+    	int id_min = lower_bound(all(vt),mid) - vt.begin();
+    	int id_max = upper_bound(all(vt),mid) - vt.begin() - 1;
+    	int diff = (id_min ? (id_min ) * mid - pre[id_min - 1]  : 0) - (id_max < n ? (pre[n-1] - pre[id_max]) - (n-id_max - 1)*mid:0);
+        cout<< mid <<" "<<diff<<" "<< (id_min ?(id_min) * mid - pre[id_min - 1]  : 0)<< "  "<<((id_max < n ? (pre[n-1] - pre[id_max]) - (n-id_max - 1)*mid:0))<< "\n";
+        FOR(i,0,n)cout<<valid[i]<<" ";
+        cout<<"\n"<<id_min<<"\n";
+    	if(diff == 0 && valid[id_min]==true)
+    	{
+    		cout<<"Yes\n";
+    		return;
+    	}
+    	if(diff>0 || valid[id_min]==false)
+    		r=mid;
+    	else
+    		l=mid;
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout<<"No\n";
 }
 signed main()
 {

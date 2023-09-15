@@ -87,32 +87,39 @@ ll gcd(ll a, ll b)
 }
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    string a, b;
+    cin >> a >> b;
+    vvi dp(sz(a) + 1, vi(sz(b) + 1, 0));
+    FORE(i, 1, sz(a))
     {
-    	p[i]++;
+        FORE(j, 1, sz(b))
+        {
+            dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+            dp[i][j] = max(dp[i][j], dp[i - 1][j - 1] + bool(a[i - 1] == b[j - 1]));
+        }
     }
-    int ans=0;
-    if(p[-1] > p[1])
+    int i = sz(a), j = sz(b);
+    string ans = "";
+    while (i && j)
     {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
+        int ni = i, nj = j;
+        if (dp[i - 1][j] > dp[i][j - 1])
+            ni--;
+        else
+            nj--;
+        if (dp[ni][nj] < (dp[i - 1][j - 1] + bool(a[i - 1] == b[j - 1])))
+            nj = j - 1, ni = i - 1, ans.pb(a[i - 1]);
+        i = ni;
+        j = nj;
     }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    reverse(all(ans));
+    cout << ans << endl;
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

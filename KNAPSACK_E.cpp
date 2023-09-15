@@ -87,32 +87,41 @@ ll gcd(ll a, ll b)
 }
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    ll n, w;
+    cin >> n >> w;
+    vector<pii> val(n);
+    trav(i, val)
+            cin >>
+        i.F >> i.S;
+    vvl dp(n, vl(1e5 + 2, 1e18));
+    dp[0][0] = 0;
+    dp[0][val[0].S] = val[0].F;
+    FOR(i, 1, n)
     {
-    	p[i]++;
+        dp[i][0] = 0;
+        FOR(j, 0, 1e5+1)
+        {
+            dp[i][j] = dp[i - 1][j];
+            if (j >= val[i].S)
+                dp[i][j] = min(dp[i][j], dp[i - 1][j - val[i].S] + val[i].F);
+        }
     }
-    int ans=0;
-    if(p[-1] > p[1])
+    int ans = 0;
+    ROF(i, 1e5 + 1, 0)
     {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
+        if (dp[n - 1][i] <= w)
+        {
+            ans = i;
+            break;
+        }
     }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout << ans << endl;
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

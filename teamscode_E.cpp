@@ -89,24 +89,20 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vl vt(n);
+    // ARRAY INPUT
+    cin >> vt;
+    ll mn = 0, mx = 0;
+    FOR(i, 0, n)
     {
-    	p[i]++;
+        ll a = mx + vt[i];
+        ll b = mx * vt[i];
+        ll c = mn * vt[i];
+        ll d = mn + vt[i];
+        mx = max(a, max(b, max(c, d)));
+        mn = min(a, min(b, min(c, d)));
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout << mx << "\n";
 }
 signed main()
 {

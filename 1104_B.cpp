@@ -8,6 +8,7 @@
 #include <cmath>
 #include <list>
 #include <queue>
+#include <stack>
 #include <sstream>
 #include <bitset>
 #include <numeric>
@@ -87,32 +88,23 @@ ll gcd(ll a, ll b)
 }
 void solve()
 {
-    int n;
+    string n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    stack<char> st;
+    FOR(i, 0, sz(n))
     {
-    	p[i]++;
+        if (st.empty() || st.top() != n[i])
+            st.push(n[i]);
+        else if (st.top() == n[i])
+            st.pop();
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    YES(((sz(n) - st.size()) / 2) & 1);
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

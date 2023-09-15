@@ -89,24 +89,25 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vi vt(n);
+    cin>>vt;
+    string str;
+    cin>>str;
+    vector<int> a(n+1 , 0),b(n+1,0);
+    for(int i=0;i<n;i++)
     {
-    	p[i]++;
+    	a[i+1] = a[i], b[i+1] = b[i];
+    	if(str[i] == '0')
+    		a[i+1] ^= vt[i];
+    	else
+    		b[i+1] ^= vt[i];
     }
-    int ans=0;
-    if(p[-1] > p[1])
+    int q;
+    cin>>q;
+    for(int i=0;i<q;i++)
     {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
+    	
     }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
 }
 signed main()
 {

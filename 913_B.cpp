@@ -89,30 +89,37 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vector<vector<int>> adj(n,vector<int>(0));
+    FOR(i,1,n)
     {
-    	p[i]++;
+        int t;cin>>t;
+        t--;
+        adj[t].push_back(i);
     }
-    int ans=0;
-    if(p[-1] > p[1])
+    vector<int> dp(n,-1);
+    function<void(int)> dfs= [&](int index)
     {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
+        dp[index] =0;
+        for(auto i:adj[index])
+        {
+            if(dp[i]==-1)   dfs(i);
+            if(dp[i]==0)    dp[index]++;
+        }
+    };
+    dfs(0);
+    bool flag= true;
+    FOR(i,0,n)
+    {
+        flag&=(adj[i].size()==0 || dp[i]>=3);
     }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    Yes(flag);
+
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

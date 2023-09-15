@@ -87,26 +87,24 @@ ll gcd(ll a, ll b)
 }
 void solve()
 {
-    int n;
-    cin >> n;
+    int n,p,k;
+    cin >> n>>p>>k;
     vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    sort(all(vt));
+    vi dp(n);
+    FOR(i,0,n)
     {
-    	p[i]++;
+    	if(i<k-1)
+    		dp[i] =vt[0];
+    	else if(i==k-1)
+            dp[i] = vt[i];
+        else
+    		dp[i] = vt[i] + dp[i-k];
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    int ans = distance(dp.begin(),upper_bound(all(dp),p));
+    cout<<(ans/k*k + bool(ans%k))<<"\n";
+
+    
 }
 signed main()
 {

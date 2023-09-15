@@ -89,24 +89,25 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vector<int> vt(n);
+    cin>> vt;
+   	vector<bool> dp(n);
+    int mn = vt[0];
+    dp[0]=true;
+    FOR(i,1,n)
     {
-    	p[i]++;
+        dp[i] = (mn>vt[i]);
+        mn = min(mn,vt[i]);
     }
+    minpq<int> pq;
     int ans=0;
-    if(p[-1] > p[1])
+    FOR(i,0,n)
     {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
+        if(dp[i])   continue;
+        if(pq.size()==0 || pq.top() > vt[i])
+            ans++,pq.push(vt[i]);
     }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout<<ans<<"\n";
 }
 signed main()
 {

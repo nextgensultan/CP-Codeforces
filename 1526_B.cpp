@@ -87,26 +87,19 @@ ll gcd(ll a, ll b)
 }
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
-    {
-    	p[i]++;
-    }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    int x;cin>>x;
+    bool ans = false;
+        for (int i = 0; i < 11; i++) {
+            if (111 * i <= x && (x - 111 * i) % 11 == 0) {
+                ans = true;
+            }
+        }
+        if (ans) {
+            std::cout << "YES\n";
+        } else {
+            std::cout << "NO\n";
+        }
+
 }
 signed main()
 {

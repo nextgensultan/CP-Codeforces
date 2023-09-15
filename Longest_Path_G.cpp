@@ -85,34 +85,38 @@ ll gcd(ll a, ll b)
 {
     return b ? gcd(b, a % b) : a;
 }
+void dfs(vvi & adj,int index,vi &dp)
+{
+    dp[index]=0;
+    trav(i,adj[index]) {
+        if(dp[i]==-1)
+            dfs(adj,i,dp);
+        dp[index] =max(dp[index],dp[i]+1);
+    }
+}
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    int n,m;
+    cin >> n>>m;
+    vvi adj(n, vi(0));
+    vi dp(n,-1);
+    FOR(i,0,m)
     {
-    	p[i]++;
+        int a,b;cin>>a>>b;a--,b--;
+        adj[a].pb(b);
     }
-    int ans=0;
-    if(p[-1] > p[1])
+    FOR(i,0,n)
     {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
+        if(dp[i]!=-1) continue;
+        dfs(adj,i,dp);
     }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout<<*max_element(all(dp))<<"\n";
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

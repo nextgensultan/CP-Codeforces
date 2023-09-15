@@ -89,24 +89,13 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
-    {
-    	p[i]++;
-    }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    vi ans;
+    ans.pb(n);
+    while(bitcount(n)!=1)
+    	n-=(1<<__builtin_ctz(n)),ans.pb(n);
+    while(n!=1)
+    	n>>=1,ans.pb(n);
+    cout<<ans.size()<<"\n"<<ans<<"\n";
 }
 signed main()
 {

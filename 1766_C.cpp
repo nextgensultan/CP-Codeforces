@@ -81,32 +81,21 @@ void yes(bool t = 1) { cout << (t ? "yes\n" : "no\n"); }
 void NO(bool t = 1) { YES(!t); }
 void No(bool t = 1) { Yes(!t); }
 void no(bool t = 1) { yes(!t); }
-ll gcd(ll a, ll b)
-{
-    return b ? gcd(b, a % b) : a;
-}
 void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    string a, b;
+    cin >> a >> b;
+    vvi adj(2 * n, vi(0));
+    FOR(i, 0, n)
     {
-    	p[i]++;
+        if (a[i] == 'W')
+            continue;
+        if (i < n - 1 && a[i + 1] == 'B')
+            adj[i].pb(i + 1);
+        bool down = b[i] == 'B' ? true : false;
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
 }
 signed main()
 {

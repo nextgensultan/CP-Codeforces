@@ -89,30 +89,29 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
-    {
-    	p[i]++;
-    }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    vector<vector<int>> adj(n,vector<int>(0));
+   	FOR(i,0,n-1)
+   	{
+   		int t;cin>>t;t--;
+   		adj[t].pb(i+1);
+   	}
+   	vi clr(n);cin>>clr;
+   	function<ll(int)> dfs = [&](int index)
+   	{
+   		int cost = 0; 
+   		trav(i,adj[index])
+   		{
+   			cost += dfs(i) + (clr[i]!=clr[index]);
+   		}
+   		return cost;
+   	};
+   	cout<<1+dfs(0)<<"\n";
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

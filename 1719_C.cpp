@@ -12,6 +12,7 @@
 #include <bitset>
 #include <numeric>
 #include <functional>
+#include<stack>
 using namespace std;
 typedef long long ll;
 using namespace std;
@@ -87,26 +88,49 @@ ll gcd(ll a, ll b)
 }
 void solve()
 {
-    int n;
-    cin >> n;
+    int n ,q;
+    cin >> n >> q;
     vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vector<bool> flag(n,false);
+    int mx = vt[0];
+    FOR(i,0,n)
     {
-    	p[i]++;
+    	flag[i] = bool(mx <= vt[i]);
+    	mx=max(mx,vt[i]);
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    stack<int> s;
+    s.push(n-1);
+    vi Nmx(n);
+    Nmx[n-1] = 0;
+    
+   	ROF(i,n-2,0)
+   	{
+   		while(s.size() && vt[s.top()] < vt[i])
+   			s.pop();
+   		if(s.size()) Nmx[i] = s.top();
+   		else Nmx[i] = 0;
+   		s.push(i);
+   	}
+   	FOR(i,0,q)
+   	{
+   		int a,c;
+   		cin>>a>>c;a--;
+   		if(flag[a]==false)
+   		{
+   			cout<<"0\n";
+   			continue;
+   		}
+   		c = max(0,c - max(0,(a-1)));
+   		int ans = 0;
+   		if(Nmx[a]==0)
+   			ans+=c;
+   		else
+   			ans = Nmx[a] - a - 1 + bool(a);
+   		cout<<min(c , ans)<<"\n";
+
+   	}
+
+    
 }
 signed main()
 {

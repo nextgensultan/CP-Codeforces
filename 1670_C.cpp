@@ -89,24 +89,46 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vector<int> a(n),b(n),c(n);
+    cin>>a>>b>>c;
+    set<int> pre;
+    trav(i,c) if(i)pre.insert(i);
+    vi link(n+1);
+    iota(all(link),0);
+    vi siz(n+1,1);
+    function<int(int)>  get = [&](int x)
     {
-    	p[i]++;
-    }
-    int ans=0;
-    if(p[-1] > p[1])
+    	while(link[x]!=x)
+    		x=link[x];
+    	return x;
+    };
+    FOR(i,0,n)
     {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
+        
+    	if(pre.find(a[i])!=pre.end() || pre.find(b[i])!=pre.end())
+    		{link[a[i]]=link[b[i]] = 0;continue;}
+    	int NA = get(a[i]);
+    	int NB = get(b[i]);
+        if(NA==0 || NB==0)
+            {link[NA] = link[NB] = 0;continue;}
+    	if(NA==NB ) continue;
+    	if(siz[NA] < siz[NB])
+    		swap(NA,NB);
+    	siz[NA]+=siz[NB];
+    	link[NB]=NA;
     }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    set<int> ans;
+    for(int i=1;i<=n;i++)
+    {
+    	if(pre.find(i) != pre.end() || siz[i] == 1 || get(i)==0)	continue;
+    	ans.insert(get(i));
+    }
+    ans.erase(0);
+    ll A=1;
+    FOR(i,0,ans.size())
+        A<<=1,A%=ll(MOD);
+    cout<<A<<"\n";
+
 }
 signed main()
 {

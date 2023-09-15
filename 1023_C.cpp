@@ -75,44 +75,41 @@ ostream &operator<<(ostream &out, vector<T> &a)
         out << x << ' ';
     return out;
 };
+ll gcd(ll a, ll b)
+{
+    return b ? (b, a % b) : a;
+}
 void YES(bool t = 1) { cout << (t ? "YES\n" : "NO\n"); }
 void Yes(bool t = 1) { cout << (t ? "Yes\n" : "No\n"); }
 void yes(bool t = 1) { cout << (t ? "yes\n" : "no\n"); }
 void NO(bool t = 1) { YES(!t); }
 void No(bool t = 1) { Yes(!t); }
 void no(bool t = 1) { yes(!t); }
-ll gcd(ll a, ll b)
-{
-    return b ? gcd(b, a % b) : a;
-}
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    int n, r;
+    cin >> n >> r;
+    string str;
+    cin >> str;
+    string ans;
+    int c = 0;
+    for (int i = 0; i < n; ++i)
     {
-    	p[i]++;
+        if (str[i] == '(')
+            c++;
+        ans.pb(str[i]);
+        if (c == r / 2)
+            break;
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout << ans;
+    ROF(i, r - sz(ans), 1)
+    cout << ")";
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

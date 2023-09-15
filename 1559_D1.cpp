@@ -85,34 +85,73 @@ ll gcd(ll a, ll b)
 {
     return b ? gcd(b, a % b) : a;
 }
+class dsu{
+public:
+	vector<int> p, lvl;
+    dsu(int n){
+        p.resize(n);
+        lvl.assign(n, 0);
+        iota(all(p), 0);
+    }
+
+    int get(int i){
+        if(i == p[i]) return i;
+        return p[i] = get(p[i]);
+    }
+    bool unite(int a, int b){
+        a = p[a] = get(a);
+        b = p[b] = get(b);
+        if(a == b){
+            return false;
+        }
+        if(lvl[a] < lvl[b])swap(a, b);
+        p[b] = a;
+        if(lvl[a] == lvl[b]){
+            ++lvl[a];
+        }
+        return true;
+    }
+    bool reachable(int a, int b){
+        return get(a) == get(b);
+    }
+};
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    int n,m1,m2;
+    cin >> n >> m1>> m2;
+    dsu A(n),B(n);
+    FOR(i,0,m1)
     {
-    	p[i]++;
+    	int a,b;
+    	cin>>a>>b;
+    	a--,b--;
+    	A.unite(a,b);
     }
-    int ans=0;
-    if(p[-1] > p[1])
+    FOR(i,0,m2)
     {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
+    	int a,b;
+    	cin>>a>>b;
+    	a--,b--;
+    	B.unite(a,b);
     }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    vector<pii> ans;
+    FOR(i,0,n)
+    {
+    	FOR(j,i+1,n)
+    	{
+    		if(!A.reachable(i,j) && !B.reachable(i,j))
+    			A.unite(i,j),B.unite(i,j),ans.pb({i+1,j+1});
+    	}
+    }
+    cout<<ans.size()<<"\n";
+    trav(i,ans)
+    	cout<<i.F <<" " << i.S<<"\n";
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

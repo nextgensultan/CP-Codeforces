@@ -88,25 +88,21 @@ ll gcd(ll a, ll b)
 void solve()
 {
     int n;
-    cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
-    {
-    	p[i]++;
+    double x;
+    cin >> n >>x;
+    vi vt(n);
+    cin>>vt;
+    sort(all(vt));
+    vi dp(n);
+    for( int i =n-1;i>=0;i--){
+    	int a = i + ceil(x/vt[i]);
+    	if(a == n)
+    		dp[i] = 1;
+    	else if(a<n)
+    		dp[i] = dp[a] + 1;
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout<<*max_element(all(dp))<<"\n";
+
 }
 signed main()
 {

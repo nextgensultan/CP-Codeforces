@@ -12,6 +12,7 @@
 #include <bitset>
 #include <numeric>
 #include <functional>
+#include<iomanip>
 using namespace std;
 typedef long long ll;
 using namespace std;
@@ -85,34 +86,40 @@ ll gcd(ll a, ll b)
 {
     return b ? gcd(b, a % b) : a;
 }
+//flips * heads
+vector<vector<double>> dp(3000,vector<double>(3000,0));
 void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vector<double> p(n);
+    cin >> p;
+    dp[0][0] = 1 - p[0];
+    dp[0][1] = p[0];
+    FOR(i,1,n)
     {
-    	p[i]++;
+    	FORE(j,0,n)
+    	{
+    		//tails
+    		dp[i][j] += (1-p[i]) * dp[i - 1][j];
+    		//head
+            if(j)
+    		dp[i][j] += p[i] * dp[i - 1][j - 1];
+    	}
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout << setprecision(9);
+    cout << fixed;
+    double ans = 0;
+	FOR(i,n/2+1,3000)
+		ans+=dp[n-1][i];
+	cout<< ans << endl;
+
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

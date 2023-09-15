@@ -85,34 +85,75 @@ ll gcd(ll a, ll b)
 {
     return b ? gcd(b, a % b) : a;
 }
+class node{
+public:
+    ll l,r,mx,pre,post,sum;
+    node()
+    {
+        l=r=-1;
+        mx=pre=post = sum =-1e18;
+    }
+};
 void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vi vt(n);
+    //inputs the whole vec
+    cin>>vt;
+    vector<node> seg(4*n);
+
+    function <void(node&,node&,node&)> merge = [&](node& res ,node& f ,node&  l)
     {
-    	p[i]++;
-    }
-    int ans=0;
-    if(p[-1] > p[1])
+        res.sum = f.sum + l.sum;
+        res.mx = max(max(f.mx,l.mx),f.post + l.pre);
+        res.pre = max(f.pre, f.sum + l.pre);
+        res.post = max(l.post, l.sum + f.post);
+    };
+    function<void(int,int,int)> create = [&](int i ,int l,int r)
     {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
+        seg[i].l = l,seg[i].r=r;
+        if(l==r)
+        {
+            seg[i].mx = seg[i].pre = seg[i].post = seg[i].sum = vt[l];
+            return;
+        }
+        int mid = (l+r)>>1;
+        create(2*i + 1 , l,mid);
+        create(2*i + 2 , mid+1,r);
+        merge(seg[i] , seg[2*i +1],seg[2*i + 2]);
+    };
+    create(0,0,n-1);
+    function<node*(int,int,int)> get = [&](int i , int l,int r)
+    {
+        if(seg[i].l > r || seg[i].r < l)
+            return new node();
+        if(seg[i].l>= l && seg[i].r<=r)
+            return &seg[i];
+        node * ptr = new node();
+        node* left = get(2*i + 1,l,r);
+        node* right = get(2*i + 2,l,r);
+        if(left->sum == ll(-1e18))
+            return right;
+        if(right->sum == ll(-1e18))
+            return left;
+        merge(*ptr,*left,*right);
+        return ptr;
+    };
+    int q;cin>>q;
+    for(int i=0;i<q;i++)
+    {
+        int l,r;
+        cin>>l>>r;
+        l--,r--;
+        cout<< get(0,l,r)->mx << "\n";
     }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

@@ -87,32 +87,28 @@ ll gcd(ll a, ll b)
 }
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    int w, h;
+    cin >> h >> w;
+    vector<string> G(h);
+    cin >> G;
+    vvl dp(h, vl(w, 0));
+    dp[0][0] = 1;
+    FOR(i, 0, h)
     {
-    	p[i]++;
+        FOR(j, 0, w)
+        {
+            dp[i][j] += (i && G[i - 1][j] == '.') ? dp[i - 1][j] : 0;
+            dp[i][j] += (j && G[i][j - 1] == '.') ? dp[i][j - 1] : 0;
+            dp[i][j] = dp[i][j] % MOD;
+        }
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout << dp[h - 1][w - 1] << "\n";
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

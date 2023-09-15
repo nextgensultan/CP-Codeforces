@@ -18,8 +18,6 @@ using namespace std;
 using ll = long long;
 const int MOD = 1e9 + 7;
 const ll INF = 1e18;
-// freopen("input.txt", "r", stdin);
-// freopen("output.txt", "w", stdout);
 #define F first
 #define S second
 #define all(x) x.begin(), x.end()
@@ -89,30 +87,25 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vi vt(n);
+    cin>>vt;
+    sort(all(vt));
+    int ans=1e9;
+    FOR(i,0,n)
     {
-    	p[i]++;
+    	ans = min(ans, int(n - (upper_bound(all(vt),2*vt[i]) - vt.begin() -  i)));
+    	i = upper_bound(all(vt),vt[i]) - vt.begin() - 1;
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout<<ans<<"\n";
+
 }
 signed main()
 {
     cin.tie(0)->sync_with_stdio(0);
     int t = 1;
-    cin >> t;
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    // cin >> t;
     for (int test = 1; test <= t; test++)
     {
         solve();

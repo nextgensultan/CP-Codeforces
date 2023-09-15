@@ -89,24 +89,29 @@ void solve()
 {
     int n;
     cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
+    vl vt(n);
+    for (ll i = 0; i < n; i++)
+        vt[i] = (i + 1) * (i + 1);
+    vl pre(n + 1, 0);
+    partial_sum(all(vt), pre.begin() + 1);
+    ll ans = 0;
+    FORE(i, 0, n)
     {
-    	p[i]++;
+        ll sum = 0;
+        FOR(j, 1, i)
+        sum += ll(j) * j;
+        // 1t*1th + 2th*2th +...+i-1th*i-1th;
+        int mx = 0;
+        for (int j = i; j <= n; j++)
+        {
+            int val = j * (n - (j - i));
+            sum += val;
+            mx = max(mx, val);
+        }
+        // cout << sum - mx << "\n\n";
+        ans = max(ans, sum - mx);
     }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    cout << ans << "\n";
 }
 signed main()
 {

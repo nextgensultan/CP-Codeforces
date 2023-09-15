@@ -87,26 +87,14 @@ ll gcd(ll a, ll b)
 }
 void solve()
 {
-    int n;
-    cin >> n;
-    vi vt(n);cin>>vt;
-    map<int,int> p;
-    p[1] = p[-1] = 0;
-    trav(i,vt)
-    {
-    	p[i]++;
-    }
-    int ans=0;
-    if(p[-1] > p[1])
-    {
-    	int diff = (p[-1] - p[1] + 1 ) / 2;
-    	p[-1]-=diff;
-    	p[1]+=diff;
-    	ans+=diff;
-    }
-    if(p[-1] & 1)
-    	ans++;
-    cout<<ans<<endl;
+    ll n,x,y;
+    cin>>n>>x>>y;
+    ll lcm = (x*y)/gcd(x,y);
+    ll id= n / x - n/lcm;
+    ll ans = n*(n+1)/2 - (n - id)*(n - id + 1) /2;
+    id = n/y - n/lcm;
+    ans-=(id)*(id+1)/2;
+    cout<<ans<<"\n";
 }
 signed main()
 {
